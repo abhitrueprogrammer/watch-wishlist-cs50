@@ -1,0 +1,16 @@
+{% extends "template.html" %}
+{% block body %}
+    <ul class="selection-menu">
+        <a href="{{ url_for('guide') }}">
+            <li class="selection-item">Get Started</li>
+        </a>
+        <li class="selection-item">Mechanical vs quartz watch</li>
+        <li class="selection-item">Watch Brands</li>   <!-- Show a list of brands queries thru sql -->
+        <!-- timex rolex gshock -->
+        <li class="selection-item">Mechanical Watch winding mechanisms</li>
+        <li class="selection-item">Customisibility</li>
+        <li class="selection-item">StoreFront</li>
+        <li class="selection-item">Types of backs</li>
+        <li class="selection-item">complications</li>
+    </ul>
+{% endblock %}
