@@ -1,0 +1,16 @@
+{% extends "template.html" %}
+{% block body %}
+<!-- Make table instead of an ul -->
+<ul class="list-group">
+    {% for watch in watches %}
+    <li class="list-group-item">{{watch["title"]}}
+        <form method="get">
+            <input class="btn btn-primary" type="submit" name="button" value="info">
+            <input type="hidden" value="watch["id"]">
+            <input class="btn btn-secondary" type="submit" value="cart"> 
+            <input type="hidden" value="watch["id"]">
+            <!-- submit one to cart and other to display one  -->
+    </form>
+    </li>
+</ul>
+{% endblock %}
