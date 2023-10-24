@@ -3,3 +3,14 @@ h1 {
 warning {
     color: red;
 }
+.center {
+    text-align: center;
+}
+/* .flex {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+} */
+.padding {
+    padding-top: 2rem;
+}

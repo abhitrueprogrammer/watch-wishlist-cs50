@@ -1,5 +1,7 @@
 from flask import redirect, render_template, session
 from functools import wraps
+import sqlite3
+db = sqlite3.connect("watch.db", check_same_thread=False)
 
 def login_required(f):
     """
@@ -15,3 +17,10 @@ def login_required(f):
     return decorated_function
 def apology(warning, code):
     return render_template("apology.html", warning = warning, code = code)
+def watchExists(watchid):
+    # Was lookup function
+    id = db.execute("SELECT id FROM watches WHERE id == ?", (watchid,))
+    if id == None:
+        return False
+    else:
+        return True
