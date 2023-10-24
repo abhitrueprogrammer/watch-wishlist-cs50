@@ -50,18 +50,20 @@ def search():
 @login_required
 def addCart():
         number = 1
-        watch_id = request.form.get("watchinfo")
+        watch_id = request.form.get("watchid")
+        print(watch_id)
         if request.form.get("type") == "cart":
             if  not(watchExists(watch_id)):
                 return apology("INTERNAL ERROR: Watch not found in DB", 400)
             db.execute(
-                "INSERT INTO cart (user_name,watch_id, quantity) VALUES(?,?,?,?);",
-                session["user_id"],
+                "INSERT INTO cart (userid, watchid, quantity) VALUES(?,?,?);",
+                (session["user_id"],
                 watch_id,
-                number
+                number)
             )
             flash("Added to cart", category="message")
-            return redirect("/search")
+            db.commit()
+            return redirect("/")
         else:
             return apology("not implemented yet", 404)
 @app.route("/login", methods=["GET", "POST"])
