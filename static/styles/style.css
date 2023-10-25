@@ -14,3 +14,7 @@ warning {
 .padding {
     padding-top: 2rem;
 }
+.flexbox{
+    display: flex;
+    gap: 50px;
+}

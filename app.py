@@ -1,13 +1,11 @@
-#TODO:  Clean register and login
+#TODO:  Clean register and login, add remove button
 from flask import Flask , render_template, flash, redirect, request, session
 from flask_session import Session
-from helper import login_required, apology, watchExists
+from helper import login_required, apology, watchExists, get_image_url
 from werkzeug.security import check_password_hash, generate_password_hash
-
 # from flask_session import Session
 # from werkzeug.security import check_password_hash, generate_password_hash
 # Session(app)
-
 import sqlite3
 app = Flask(__name__)
 db = sqlite3.connect("watch.db", check_same_thread=False)
@@ -61,11 +59,34 @@ def addCart():
                 watch_id,
                 number)
             )
-            flash("Added to cart", category="message")
             db.commit()
+            flash("Added to cart", category="message")
             return redirect("/")
         else:
             return apology("not implemented yet", 404)
+@app.route("/info", method=["GET"])
+def info():
+    
+@app.route("/cart",methods=["GET","POST"])
+@login_required
+def cart():
+    if request.method == "POST":
+        to_be_removed = request.form.get("remove")
+        print(to_be_removed)
+        db.execute("DELETE FROM cart WHERE id ==?",(to_be_removed,))
+        db.commit()
+        redirect("/cart")
+    basket = db.execute("SELECT watches.id, watches.watchname, watches.image_url FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;",(session["user_id"],)).fetchall()
+    for row in basket:
+        print("checking image for", row[2])
+        if row[2] == None:
+            db.execute("""UPDATE watches
+    SET image_url = ?
+    WHERE
+    id == ?""", (get_image_url(row[1]),row[0]))
+    db.commit()
+    basket = basket = db.execute("SELECT watches.watchname, watches.image_url,  cart.id FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;",(session["user_id"],)).fetchall()
+    return render_template("cart.html", basket = basket)
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -95,8 +116,8 @@ def login():
         if not(check_password_hash(rows[0][2], request.form.get("password"))):
             return apology("invalid password", 400)
         # Remember which user has logged in
-        session["user_id"] = rows[0][1]
-
+        session["user_id"] = rows[0][0]
+        flash("You are logged  in", category="message")
         # Redirect user to home page
         return redirect("/")
 
@@ -115,6 +136,7 @@ def login():
 #     return redirect("/")
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    # get a register of top 100 used passwords from web and don't allow user to select those as password
     """Register user"""
     if request.method == "POST":
         user = request.form.get("username")

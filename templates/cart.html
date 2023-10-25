@@ -1,0 +1,29 @@
+{% extends "template.html" %}
+{% block title %}
+    cart
+{% endblock %}
+{% block body %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th> <!-- Image -->
+      <th scope="col"></th> <!--remove  -->
+    </tr>
+  </thead>
+  <tbody>
+    {% for items in basket %}
+    <tr>
+      <th scope="row">{{loop.index0+1}}</th>
+      <!-- watches.watchname, watches.image_url -->
+      <td>{{items[0]}}</td>
+      <td><img style ="max-width: 20%;height: auto;" src="{{items[1]}}" alt="{{items[0]}}"></td>
+      <td>
+        <form method="post">
+          <button class="btn btn-primary" name = "remove" value="{{items[2]}}">remove</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+{% endblock %}

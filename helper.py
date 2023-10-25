@@ -1,7 +1,10 @@
 from flask import redirect, render_template, session
 from functools import wraps
 import sqlite3
+from google_images_search import GoogleImagesSearch
+
 db = sqlite3.connect("watch.db", check_same_thread=False)
+gis = GoogleImagesSearch('AIzaSyC5uNFp0zfvsDeHg_6CA-F79ssycywQHX8', '35ed6304d1c67415a')
 
 def login_required(f):
     """
@@ -24,3 +27,15 @@ def watchExists(watchid):
         return False
     else:
         return True
+def get_image_url(query):
+    print(query)
+    _search_params = {
+    'q'       : query,
+    'num'     : 1,
+    'safe'    : 'high',
+    'fileType': 'jpg|png',
+    'imgType' : 'photo',
+    }
+    gis.search(search_params=_search_params)
+    for image in gis.results():
+        return image.url

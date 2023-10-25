@@ -1,16 +1,12 @@
-from collections import OrderedDict
-dictionary = {}
-dictionary[5] = "Abhinav"
-dictionary[15] = "Sumita"
-dictionary2 = {}
-OD = OrderedDict()
-OD[5] = "Abhinav"
-OD[15] = "Sumita"
-OD2 = OrderedDict()
-OD2[15] = "Sumita"
-OD2[5] = "Abhinav"
-
-dictionary2[15] = "Sumita"
-dictionary2[5] = "Abhinav"
-print(OD == OD2)
-print(dictionary == dictionary2)
+from google_images_search import GoogleImagesSearch
+gis = GoogleImagesSearch('AIzaSyC5uNFp0zfvsDeHg_6CA-F79ssycywQHX8', '35ed6304d1c67415a')
+_search_params = {
+    'q'       : '',
+    'num'     : 1,
+    'safe'    : 'high',
+    'fileType': 'jpg|png',
+    'imgType' : 'photo',
+}
+gis.search(search_params=_search_params)
+for image in gis.results():
+    print(image.url)

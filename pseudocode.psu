@@ -20,3 +20,9 @@ cart:
     lst_of_disc = sql.execute("FROM DB wishlist, product_disc GET XYZ") #, other discription
     return("cart.html", lst_of_disc)
 #Implement admin and user login. Admin can add watch info in db. get and then INSERT INTO DB 
+
+
+
+
+
+CSS grid, List.random pass from app.py
