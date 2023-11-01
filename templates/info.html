@@ -1,4 +1,33 @@
-<div class="flexbox">
-    <div>testy</div>
-    <div>bestie</div>
+{% extends "template.html" %}
+
+{% block title %}
+    info
+{% endblock %}
+
+{% block body %}
+<div class="center-div">
+    <div class="flexbox">
+        <div class="flexitem-fit flexbox-verticle">
+            <img src="{{image_url}}" alt="{{watch_info[1]}}"  class="watchimg fit">
+            <form method="post", action="/addCart">
+                <div class="flexbox-horizontal">
+                    <b><p class="flexitem big-font">₹{{watch_info[6]}}</p></b>
+                    <input class="btn btn-secondary btn-lg flexitem" type="submit" name ="type" value="cart">
+                    <input type="hidden" name = "watchid" value="{{watch_info[0]}}">
+                </div>
+            </form>
+        </div>
+        <div class="flexitem-fit flexbox-verticle2">
+            <!-- CREATE TABLE watches (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, watchname TEXT NOT NULL,brand text, reference TEXT,glass TEXT,
+                complications TEXT, price INTEGER NOT NULL, speciality TEXT, image_url TEXT); -->
+            <div><h1>{{watch_info[1]}}</h1></div>
+            <div class="big-font">    
+                <p class="no-margin-b">Type: {{watch_info[9]}}</p>
+                <p class="no-margin-b">complications: {{watch_info[5]}}</p>
+                <p class="no-margin-b">display type: {{watch_info[4]}}</p>
+            </div>
+                <h2 class="small-heading">speciality: {{watch_info[7]}}</h2>
+            </div>
+    </div>
 </div>
+{% endblock %}

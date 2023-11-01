@@ -1,6 +1,6 @@
 h1 {
     text-align: center;}
-warning {
+.warning {
     color: red;
 }
 .center {
@@ -14,7 +14,85 @@ warning {
 .padding {
     padding-top: 2rem;
 }
+.center-div
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+}
 .flexbox{
     display: flex;
-    gap: 50px;
+    justify-content: space-between;
+    align-items: center;
+    /* gap: 5px; */
+    border-radius: 16px;
+    background: #ffffff;
+    /* margin: 10rem;  */
+    padding: 1rem;
+    box-shadow: 0rem 0 0.5rem #000;
+    width: 75vw;
+    height: 75vh;
+}
+.flexitem-fit{
+    text-align: center;
+    flex: 1;
+}
+
+body{
+    padding: 1rem;
+    padding-top: 4.5rem;
+}
+.watchimg{
+    border-radius: 16px;
+    width: 100%;
+    height: 100%;
+}
+
+.flexbox-verticle{
+    display: flex;
+    gap: 0.5rem;
+    height: 100%;
+    /* justify-content: space-between; Does nothing dunno why */
+    flex-direction: column;
+
+}
+.flexbox-verticle2{
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+.flexbox-horizontal{
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    align-items: center;
+}
+.flexitem{
+    margin: 0;
+}
+.no-margin-b{
+    margin-bottom:0;
+}
+.margin-b{
+    margin-bottom:40px;
+}
+.small-heading{
+    font-weight:400;
+    font-size: 1.4rem;
+}
+.margin-button{
+    margin: 0.5rem;
+}
+.fit{
+    object-fit: cover;
+}
+.big-font{
+    font-size: 1.3rem;
+}
+.flexbox-info{
+    display: flex;
+    padding: 1rem;
+    width: 75vw;
+    height: 75vh;
 }

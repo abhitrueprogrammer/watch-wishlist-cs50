@@ -1,0 +1,4 @@
+                    <!-- <img class="card" href="{{detail[url]}}"> -->
+
+            <!-- <input type ="submit"   name="watch_id" value="{{detail[0]}}"   class="card" style="background-image:url('{{detail[url]}}')"> -->
+            <!-- </input> -->

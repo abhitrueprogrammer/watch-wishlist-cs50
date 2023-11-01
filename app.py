@@ -1,5 +1,6 @@
-#TODO:  Clean register and login, add remove button
+#TODO: In info draw a box around watch img and price and flex it with display column
 from flask import Flask , render_template, flash, redirect, request, session
+from flask_cors import CORS, cross_origin
 from flask_session import Session
 from helper import login_required, apology, watchExists, get_image_url
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -8,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 # Session(app)
 import sqlite3
 app = Flask(__name__)
+cors = CORS(app)
 db = sqlite3.connect("watch.db", check_same_thread=False)
 #TODO Use signed cookies instead
 app.config["SESSION_PERMANENT"] = False
@@ -24,24 +26,20 @@ def base():
 @app.route("/", methods=["POST", "GET"])
 def index():
     # if request.method() == "POST":
-    return render_template("index.html")
-@app.route("/search", methods=["POST", "GET"])
+    #or you can add images to the server
+    watches = db.execute("SELECT id, image_url,watchname from watches ORDER BY RANDOM() LIMIT 12").fetchall()
+    print(watches)
+    return render_template("index.html", watches=watches)
+@app.route("/search", methods=["GET"])
 def search():
-    if request.method == "GET":
-        keyword = request.args.get("searched")
-        print("Keyboard is", keyword)
-        if keyword == None:
-            return apology("Please enter a watchname", 400)
-        watches = db.execute("SELECT id, watchname, reference FROM watches WHERE watchname LIKE ? or reference LIKE ?", ("%" + keyword + "%","%" + keyword + "%")).fetchall()
-        print(watches)
-        return render_template("search.html", watches = watches)
-    if request.method == "POST":
-        watch_id = request.form.get("watchinfo")
-        if request.form.get("type") == "info":
-            if not(watchExists(watch_id)):
-                return apology("INTERNAL ERROR(watch not found)", 400)
-            watch_info = db.execute("SELECT * FROM watches WHERE id == ?", (watch_id,))
-            return render_template("info.html", watch_info=watch_info)
+    keyword = request.args.get("searched")
+    print("Keyboard is", keyword)
+    if keyword == None:
+        return apology("Please enter a watchname", 400)
+    watches = db.execute("SELECT id, watchname, reference FROM watches WHERE watchname LIKE ? or reference LIKE ?", ("%" + keyword + "%","%" + keyword + "%")).fetchall()
+    print(watches)
+    return render_template("search.html", watches = watches)
+    
         # CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, 
         # hash TEXT NOT NULL, cash NUMERIC NOT NULL DEFAULT 10000.00);
 @app.route("/addCart", methods=["POST"])
@@ -64,9 +62,18 @@ def addCart():
             return redirect("/")
         else:
             return apology("not implemented yet", 404)
-@app.route("/info", method=["GET"])
+@app.route("/info", methods=["POST"])
 def info():
-    
+    watch_id = request.form.get("watchid")
+    print(watch_id)
+    if not(watchExists(watch_id)):
+        return apology("INTERNAL ERROR(watch not found)", 400)
+    watch_info = db.execute("SELECT * FROM watches WHERE id == ?", (watch_id,)).fetchall()
+    watch_info = watch_info[0]
+    image_url = watch_info[8]
+    return render_template("info.html", watch_info=watch_info, image_url=image_url)
+# CREATE TABLE watches (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, watchname TEXT NOT NULL,brand text, 
+        # reference TEXT,glass TEXT, complications TEXT, price INTEGER NOT NULL, speciality TEXT, image_url TEXT);
 @app.route("/cart",methods=["GET","POST"])
 @login_required
 def cart():
@@ -76,16 +83,19 @@ def cart():
         db.execute("DELETE FROM cart WHERE id ==?",(to_be_removed,))
         db.commit()
         redirect("/cart")
-    basket = db.execute("SELECT watches.id, watches.watchname, watches.image_url FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;",(session["user_id"],)).fetchall()
+    basket = db.execute("""SELECT watches.id, watches.watchname, watches.image_url FROM cart, users, watches
+                         where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;"""
+                        ,(session["user_id"],)).fetchall()
     for row in basket:
-        print("checking image for", row[2])
+        print("checking image for", row[1])
         if row[2] == None:
-            db.execute("""UPDATE watches
-    SET image_url = ?
-    WHERE
-    id == ?""", (get_image_url(row[1]),row[0]))
+            db.execute("""
+                UPDATE watches
+                SET image_url = ?
+                WHERE
+                id == ?""", (get_image_url(row[1]),row[0]))
     db.commit()
-    basket = basket = db.execute("SELECT watches.watchname, watches.image_url,  cart.id FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;",(session["user_id"],)).fetchall()
+    basket = basket = db.execute("""SELECT watches.watchname, watches.image_url,  cart.id FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;""",(session["user_id"],)).fetchall()
     return render_template("cart.html", basket = basket)
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -166,3 +176,8 @@ def register():
         return render_template("success.html")
     else:
         return render_template("register.html")
+    
+@app.route("/creator", methods=["GET", "POST"])
+@cross_origin(origin='*')
+def creator():
+    return render_template("creator.html")

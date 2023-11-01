@@ -2,6 +2,25 @@
 {% block title %}
     Watch Wishlist
 {% endblock %}
+
 {% block body %}
-    <h1>Welcome to the first <i>good</i> watch Wishlist maker!</h1>
+    <main>
+        <h1 class="margin-b">Welcome to the first <i>good</i> watch Wishlist maker!</h1>
+
+        <div class="photo-grid">
+            <form  class="card-tall card-wide" method="post" action="/info">
+                <input class = "card-fireship fit" type="image" src="{{watches[0][1]}}" alt="{{watches[0][2]}}">
+                <input type="hidden" name="watchid"" value="{{watches[0][0]}}">
+            </form>
+
+            {% for i in range(watches|count) %}
+            {% if i > 0 %}
+            <form method="post", action="/info">
+                <input class = "card-fireship fit" type="image" src="{{watches[i][1]}}" alt="{{watches[i][2]}}">
+                <input type="hidden" name="watchid"" value="{{watches[i][0]}}">
+            </form>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </main>
 {% endblock %}

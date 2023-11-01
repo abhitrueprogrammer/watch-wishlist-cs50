@@ -22,8 +22,9 @@ def apology(warning, code):
     return render_template("apology.html", warning = warning, code = code)
 def watchExists(watchid):
     # Was lookup function
-    id = db.execute("SELECT id FROM watches WHERE id == ?", (watchid,))
-    if id == None:
+    id = db.execute("SELECT id FROM watches WHERE id == ?", (watchid,)).fetchall()
+    if id == []:
+        print("Image does not exist")
         return False
     else:
         return True
@@ -39,3 +40,15 @@ def get_image_url(query):
     gis.search(search_params=_search_params)
     for image in gis.results():
         return image.url
+def update_watch_url():
+    basket = db.execute("SELECT id, watchname, image_url FROM watches").fetchall()
+    for row in basket:
+        if row[2] == None: ##<-- do NOT fuck this up 
+                db.execute("""
+        UPDATE watches
+        SET image_url = ?
+        WHERE
+        id == ?""", (get_image_url(row[1]),row[0]))
+    db.commit()
+if __name__ == "__main__":
+    update_watch_url()
