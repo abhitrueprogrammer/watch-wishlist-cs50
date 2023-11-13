@@ -1,4 +1,4 @@
-log in blyat
+log in *swearword_in_russian
 if index.method == get():
     return index.html
 else:

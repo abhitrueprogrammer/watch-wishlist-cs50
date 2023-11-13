@@ -4,8 +4,7 @@ import sqlite3
 from google_images_search import GoogleImagesSearch
 
 db = sqlite3.connect("watch.db", check_same_thread=False)
-gis = GoogleImagesSearch('AIzaSyC5uNFp0zfvsDeHg_6CA-F79ssycywQHX8', '35ed6304d1c67415a')
-
+gis = GoogleImagesSearch('api_key', 'project_cx')
 def login_required(f):
     """
     Decorate routes to require login.

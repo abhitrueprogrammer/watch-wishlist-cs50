@@ -1,21 +1,19 @@
-#TODO: In info draw a box around watch img and price and flex it with display column
+#imports
 from flask import Flask , render_template, flash, redirect, request, session
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_session import Session
 from helper import login_required, apology, watchExists, get_image_url
 from werkzeug.security import check_password_hash, generate_password_hash
-# from flask_session import Session
-# from werkzeug.security import check_password_hash, generate_password_hash
-# Session(app)
 import sqlite3
+#making app
 app = Flask(__name__)
 cors = CORS(app)
 db = sqlite3.connect("watch.db", check_same_thread=False)
-#TODO Use signed cookies instead
+#Using cookies. Can use signed cookies instead
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-#understand this and make button show username. Later add ability to show user profile
+#Send if login to templates
 @app.context_processor
 def base():
     login_verb = "login" 
@@ -83,19 +81,19 @@ def cart():
         db.execute("DELETE FROM cart WHERE id ==?",(to_be_removed,))
         db.commit()
         redirect("/cart")
-    basket = db.execute("""SELECT watches.id, watches.watchname, watches.image_url FROM cart, users, watches
-                         where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;"""
-                        ,(session["user_id"],)).fetchall()
-    for row in basket:
-        print("checking image for", row[1])
-        if row[2] == None:
-            db.execute("""
-                UPDATE watches
-                SET image_url = ?
-                WHERE
-                id == ?""", (get_image_url(row[1]),row[0]))
-    db.commit()
-    basket = basket = db.execute("""SELECT watches.watchname, watches.image_url,  cart.id FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;""",(session["user_id"],)).fetchall()
+    # basket = db.execute("""SELECT watches.id, watches.watchname, watches.image_url FROM cart, users, watches
+    #                      where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;"""
+    #                     ,(session["user_id"],)).fetchall()
+    # for row in basket:
+    #     print("checking image for", row[1])
+    #     if row[2] == None:
+    #         db.execute("""
+    #             UPDATE watches
+    #             SET image_url = ?
+    #             WHERE
+    #             id == ?""", (get_image_url(row[1]),row[0]))
+    # db.commit()
+    basket = db.execute("""SELECT watches.watchname, watches.image_url,  cart.id FROM cart, users, watches where users.id == cart.userid and watches.id == cart.watchid and users.id == ?;""",(session["user_id"],)).fetchall()
     return render_template("cart.html", basket = basket)
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -135,15 +133,7 @@ def login():
     else:
         return render_template("login.html")
 
-# @app.route("/logout")
-# def logout():
-#     """Log user out"""
 
-#     # Forget any user_id
-#     session.clear()
-
-#     # Redirect user to login form
-#     return redirect("/")
 @app.route("/register", methods=["GET", "POST"])
 def register():
     # get a register of top 100 used passwords from web and don't allow user to select those as password
@@ -177,7 +167,6 @@ def register():
     else:
         return render_template("register.html")
     
-@app.route("/creator", methods=["GET", "POST"])
-@cross_origin(origin='*')
+@app.route("/creator")
 def creator():
     return render_template("creator.html")
