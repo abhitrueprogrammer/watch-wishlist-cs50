@@ -4,7 +4,7 @@
 
 This is a sweet project, that allows you to create a watch wishlist of your very own! 
 
-![homepage](/home/abhi/git/WW/homepage.png)
+![homepage](homepage.png)
 
 This project is hosted on flask 🐍  and uses sqlite3 for its Database. It can be run using
 
