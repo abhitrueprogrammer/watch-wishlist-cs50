@@ -6,12 +6,24 @@ This is a sweet project, that allows you to create a watch wishlist of your very
 
 ![homepage](homepage.png)
 
-This project is hosted on flask 🐍  and uses sqlite3 for its Database. It can be run using
+This project is hosted on flask 🐍  and uses sqlite3 for its Database. It can be run using following steps:
+##### Running
 
+1.Clone the repository.
+2. Install venv. Create and run a venv.
+```bash
+# for ubuntu: sudo apt install venv
+python3 -m venv ./.venv
+source ./.venv/bin/activate
+```
+3. App can be simply run using:
 ```bash
 flask run
 ```
-
+4. to generate the watch images for the watch.db simply run:
+```bash
+python3 ./helper.py
+```
 from the command line. 
 
 It also uses the bootstrap🥾 framework for styling. This project derives from the week 9 project [finance](https://cs50.harvard.edu/x/2023/psets/9/finance/) as I figured it would allow me to show all the things(except C) I learnt so far.
